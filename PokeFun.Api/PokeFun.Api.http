@@ -1,0 +1,10 @@
+@PokeFun.Api_HostAddress = http://localhost:5000
+
+###Calls base api Endpoint 
+
+GET {{PokeFun.Api_HostAddress}}/pokemon/mewtwo
+Accept: application/json
+
+###Calls translation endpoint 
+GET {{PokeFun.Api_HostAddress}}/pokemon/translated/mewtwo
+Accept: application/json
