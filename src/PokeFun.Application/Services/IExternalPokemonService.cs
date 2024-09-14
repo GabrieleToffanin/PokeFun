@@ -8,5 +8,5 @@ namespace PokeFun.Application.Services;
 /// </summary>
 public interface IExternalPokemonService
 {
-    ValueTask<ExternalPokemonDto> GetPokemonInfoAsync(string desiredPokemon, CancellationToken cancellationToken);
+    ValueTask<PokemonDto> GetPokemonInfoAsync(string desiredPokemon, CancellationToken cancellationToken);
 }
