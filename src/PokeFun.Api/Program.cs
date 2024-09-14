@@ -1,3 +1,6 @@
+using PokeFun.Application.PokemonUseCases.GetPokemonInformation;
+using PokeFun.Infrastructure.DependencyInjection;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -10,6 +13,13 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        //Configure MediatR
+        builder.Services.AddMediatR(config =>
+            config.RegisterServicesFromAssembly(typeof(GetPokemonRequestHandler).Assembly));
+
+        //Add External services adapters
+        builder.Services.RegisterExternalServices();
 
         var app = builder.Build();
 

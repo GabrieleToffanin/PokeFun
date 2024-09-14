@@ -27,7 +27,6 @@ public sealed class PokemonServiceTests
         var pokemon =
             await pokemonService.Handle(request, CancellationToken.None); // Set to none for testing purposes.
 
-
         // *** Assert
         Assert.Equal(pokemonName, pokemon.Name);
         Assert.Equal(pokemonDescription, pokemon.Description);
