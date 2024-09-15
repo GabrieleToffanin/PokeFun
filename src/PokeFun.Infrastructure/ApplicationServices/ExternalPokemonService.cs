@@ -1,6 +1,6 @@
 ﻿using PokeFun.Application.Exceptions;
 using PokeFun.Application.Models.Pokemon;
-using PokeFun.Application.Services;
+using PokeFun.Application.Services.Abstractions;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
@@ -31,7 +31,7 @@ internal sealed class ExternalPokemonService(HttpClient client)
 
         Specie specie = JsonSerializer.Deserialize<Specie>(specieResponse);
 
-        PokemonDto pokemon = new(pokemonDto.Name, specie.Description.FirstOrDefault().FlavorDescription, specie.Habitat.Name, specie.IsLegendary);
+        PokemonDto pokemon = new(pokemonDto.Name, specie.Description.FirstOrDefault(x => x.Language.Name is "en").FlavorDescription, specie.Habitat.Name, specie.IsLegendary);
 
         return pokemon;
     }

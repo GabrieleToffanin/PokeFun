@@ -1,19 +1,17 @@
-﻿
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PokeFun.Application.Models.Pokemon;
 using PokeFun.Application.Operations;
-using PokeFun.Application.PokemonUseCases.GetPokemonInformation;
+using PokeFun.Application.Services.Abstractions;
 using System.Net;
 
 namespace PokeFun.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PokemonController(IMediator mediator)
+public class PokemonController(IPokemonService pokemonService)
     : ControllerBase
 {
-    private readonly IMediator _mediator = mediator;
+    private readonly IPokemonService _pokemonService = pokemonService;
 
     [HttpGet]
     [Route("{pokemonName}")]
@@ -24,9 +22,7 @@ public class PokemonController(IMediator mediator)
         [FromRoute] string pokemonName,
         CancellationToken cancellationToken)
     {
-        GetPokemonRequest request = new(pokemonName);
-
-        var result = await this._mediator.Send(request, cancellationToken);
+        var result = await this._pokemonService.GetPokemonAsync(pokemonName, cancellationToken);
 
         if (result.OperationOutcome is Outcome.BadRequest)
             return this.BadRequest("Provided pokemon name must not be Null or Empty");
@@ -46,6 +42,14 @@ public class PokemonController(IMediator mediator)
         [FromRoute] string pokemonName,
         CancellationToken cancellationToken)
     {
-        return this.Ok();
+        var result = await this._pokemonService.GetFunTranslatedPokemonAsync(pokemonName, cancellationToken);
+
+        if (result.OperationOutcome is Outcome.BadRequest)
+            return this.BadRequest("Provided pokemon name must not be Null or Empty");
+
+        if (result.OperationOutcome is Outcome.NotFound)
+            return this.NotFound(result.ErrorMessage);
+
+        return this.Ok(result.Value);
     }
 }
