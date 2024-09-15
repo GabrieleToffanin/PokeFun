@@ -1,8 +1,10 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using PokeFun.Application.Exceptions;
 using PokeFun.Application.Models.Pokemon;
 using PokeFun.Application.PokemonUseCases.GetPokemonInformation;
 using PokeFun.Application.Services;
+using PokeFun.Application.Services.Abstractions;
 
 namespace PokeFun.Application.Tests.Pokemon;
 
@@ -35,11 +37,10 @@ public sealed class PokemonServiceTests
 
 
         // *** Assert
-        Assert.True(pokemon.OperationOutcome is Operations.Outcome.Success);
-        Assert.Equal(pokemonName, pokemon.Value.Name);
-        Assert.Equal(pokemonDescription, pokemon.Value.Description);
-        Assert.Equal(pokemonHabitat, pokemon.Value.Habitat);
-        Assert.True(pokemon.Value.IsLegendary);
+        Assert.Equal(pokemonName, pokemon.Name);
+        Assert.Equal(pokemonDescription, pokemon.Description);
+        Assert.Equal(pokemonHabitat, pokemon.Habitat);
+        Assert.True(pokemon.IsLegendary);
     }
 
     [Theory]
@@ -53,16 +54,17 @@ public sealed class PokemonServiceTests
     {
         // *** Arrange
         GetPokemonRequest request = new(pokemonName);
-        Mock<IExternalPokemonService> externalPokemonService = new();
 
-        externalPokemonService.Setup(x => x.GetPokemonInfoAsync(pokemonName, It.IsAny<CancellationToken>()))
+        Mock<IMediator> externalPokemonService = new();
+
+        externalPokemonService.Setup(x => x.Send(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new PokemonDto(pokemonName, pokemonDescription, pokemonHabitat, isLegendary));
 
-        GetPokemonRequestHandler pokemonService = new(externalPokemonService.Object);
+        PokemonService pokemonService = new(externalPokemonService.Object);
 
         // *** Act
         var pokemon =
-            await pokemonService.Handle(request, CancellationToken.None); // Set to none for testing purposes.
+            await pokemonService.GetPokemonAsync(pokemonName, CancellationToken.None); // Set to none for testing purposes.
 
         // *** Assert
         Assert.True(pokemon.OperationOutcome == Operations.Outcome.BadRequest);
@@ -76,18 +78,18 @@ public sealed class PokemonServiceTests
         string pokemonHabitat,
         bool isLegendary)
     {
-        // *** Arrange
         GetPokemonRequest request = new(pokemonName);
-        Mock<IExternalPokemonService> externalPokemonService = new();
 
-        externalPokemonService.Setup(x => x.GetPokemonInfoAsync(pokemonName, It.IsAny<CancellationToken>()))
+        Mock<IMediator> externalPokemonService = new();
+
+        externalPokemonService.Setup(x => x.Send(request, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new PokemonNotFoundException($"Can not find any pokemon with given name {pokemonName}."));
 
-        GetPokemonRequestHandler pokemonService = new(externalPokemonService.Object);
+        PokemonService pokemonService = new(externalPokemonService.Object);
 
         // *** Act
         var pokemon =
-            await pokemonService.Handle(request, CancellationToken.None); // Set to none for testing purposes.
+            await pokemonService.GetPokemonAsync(pokemonName, CancellationToken.None); // Set to none for testing purposes.
 
         // *** Assert
         Assert.True(pokemon.OperationOutcome == Operations.Outcome.NotFound);

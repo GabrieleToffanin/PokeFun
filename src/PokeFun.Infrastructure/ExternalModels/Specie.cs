@@ -16,4 +16,13 @@ public record Description
 {
     [JsonPropertyName("flavor_text")]
     public string FlavorDescription { get; set; }
+    [JsonPropertyName("language")]
+    public Language Language { get; set; }
+}
+
+
+public record Language
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }

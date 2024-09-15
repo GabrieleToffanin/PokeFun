@@ -1,7 +1,6 @@
-﻿
-using PokeFun.Application.Models.Pokemon;
+﻿using PokeFun.Application.Models.Pokemon;
 
-namespace PokeFun.Application.Services;
+namespace PokeFun.Application.Services.Abstractions;
 
 /// <summary>
 /// Port for external PokemonService pokeapi.co

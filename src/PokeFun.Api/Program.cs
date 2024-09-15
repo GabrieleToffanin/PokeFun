@@ -1,4 +1,6 @@
 using PokeFun.Application.PokemonUseCases.GetPokemonInformation;
+using PokeFun.Application.Services;
+using PokeFun.Application.Services.Abstractions;
 using PokeFun.Infrastructure.DependencyInjection;
 
 public class Program
@@ -17,6 +19,9 @@ public class Program
         //Configure MediatR
         builder.Services.AddMediatR(config =>
             config.RegisterServicesFromAssembly(typeof(GetPokemonRequestHandler).Assembly));
+
+        //Add ApplicationServices
+        builder.Services.AddScoped<IPokemonService, PokemonService>();
 
         //Add External services adapters
         builder.Services.RegisterExternalServices();
