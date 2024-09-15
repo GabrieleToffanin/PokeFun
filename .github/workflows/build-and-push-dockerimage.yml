@@ -15,18 +15,18 @@ jobs:
         uses: actions/checkout@v4
        - 
         name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
        -
         name: Restore with dotnet
-        run: dotnet restore ./PokeFun
+        run: dotnet restore
        - 
         name: Build with dotnet
-        run: dotnet build ./PokeFun/src/PokeFun.Api/PokeFun.Api.csproj --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore
        - 
         name: Test RecipesController
-        run: dotnet test ./PokeFun/tst/PokeFun.Application.Tests --no-restore
+        run: dotnet test --no-build --verbosity normal
   
   BuildAndPushDockerImage:
     runs-on: ubuntu-latest
