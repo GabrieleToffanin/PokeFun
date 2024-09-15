@@ -12,45 +12,60 @@ public sealed class ExternalFunTranslationService(
 
     public async ValueTask<string> TranslatePokemonDescriptionUsingYodaAsync(string pokemonDescription, CancellationToken cancellationToken)
     {
-        TranslationRequest request = new() { Text = pokemonDescription };
+        try
+        {
+            TranslationRequest request = new() { Text = pokemonDescription };
 
-        string serialized = JsonSerializer.Serialize(request);
+            string serialized = JsonSerializer.Serialize(request);
 
-        HttpContent httpPostContent = new StringContent(serialized, Encoding.UTF8, "application/json");
+            HttpContent httpPostContent = new StringContent(serialized, Encoding.UTF8, "application/json");
 
-        var httpMessageTranslationResult = await httpClient.PostAsync("yoda.json", httpPostContent, cancellationToken);
+            var httpMessageTranslationResult = await httpClient.PostAsync("yoda.json", httpPostContent, cancellationToken);
 
-        httpMessageTranslationResult.EnsureSuccessStatusCode();
+            httpMessageTranslationResult.EnsureSuccessStatusCode();
 
-        string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
+            string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
 
-        TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
+            TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
 
-        if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource.
-            return pokemonDescription;
+            if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource.
+                return pokemonDescription;
 
-        return result.Content.Translated;
+            return result.Content.Translated;
+
+        }
+        catch (HttpRequestException ex)
+        {
+            return pokemonDescription; // Probably a more graceful handling is required.
+        }
     }
 
     public async ValueTask<string> TranslatePokemonDescriptionUsingShakespeareAsync(string pokemonDescription, CancellationToken cancellationToken)
     {
-        TranslationRequest request = new() { Text = pokemonDescription };
+        try
+        {
+            TranslationRequest request = new() { Text = pokemonDescription };
 
-        string serialized = JsonSerializer.Serialize(request);
+            string serialized = JsonSerializer.Serialize(request);
 
-        HttpContent httpPostContent = new StringContent(serialized, Encoding.UTF8, "application/json");
+            HttpContent httpPostContent = new StringContent(serialized, Encoding.UTF8, "application/json");
 
-        var httpMessageTranslationResult = await httpClient.PostAsync("shakespeare.json", httpPostContent, cancellationToken);
+            var httpMessageTranslationResult = await httpClient.PostAsync("shakespeare.json", httpPostContent, cancellationToken);
 
-        httpMessageTranslationResult.EnsureSuccessStatusCode();
+            httpMessageTranslationResult.EnsureSuccessStatusCode();
 
-        string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
+            string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
 
-        TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
+            TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
 
-        if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource, or rate limit kicked in.
-            return pokemonDescription;
+            if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource, or rate limit kicked in.
+                return pokemonDescription;
 
-        return result.Content.Translated;
+            return result.Content.Translated;
+        }
+        catch (HttpRequestException ex)
+        {
+            return pokemonDescription; // Probably a more graceful handling is required.
+        }
     }
 }
