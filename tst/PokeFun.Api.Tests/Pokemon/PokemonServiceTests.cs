@@ -69,7 +69,7 @@ public sealed class PokemonServiceTests
     }
 
     [Theory]
-    [InlineData("o_O", "TestDescription", "TestHabitat", true)]
+    [InlineData("bhobho", "TestDescription", "TestHabitat", true)]
     public async Task WhenRequestedPokemonNameNotAPokemonName_ReturnsNotFound(
         string pokemonName,
         string pokemonDescription,
