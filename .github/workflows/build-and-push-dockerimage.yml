@@ -25,8 +25,8 @@ jobs:
         name: Build with dotnet
         run: dotnet build --configuration Release --no-restore
        - 
-        name: Test RecipesController
-        run: dotnet test --no-build --verbosity normal
+        name: Run Tests
+        run: dotnet test --filter PokeFun.Application.Tests.Pokemon.PokemonServiceTests --verbosity normal
   
   BuildAndPushDockerImage:
     runs-on: ubuntu-latest
