@@ -14,6 +14,8 @@ internal sealed class ExternalPokemonService(HttpClient client)
     {
         var httpMessage = await this._pokemonApiHttpClient.GetAsync($"pokemon/{desiredPokemon}", cancellationToken);
 
+        httpMessage.EnsureSuccessStatusCode();
+
         PokemonNotFoundException.ThrowIfNotFound(desiredPokemon, httpMessage.StatusCode);
 
         string response = await httpMessage.Content.ReadAsStringAsync();

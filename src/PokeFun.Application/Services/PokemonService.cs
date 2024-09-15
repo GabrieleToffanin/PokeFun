@@ -44,7 +44,7 @@ public sealed class PokemonService(IMediator mediator) : IPokemonService
 
             var result = await this._mediator.Send(request, cancellationToken);
 
-            GetTranslatedPokemonRequest translationRequest = new(result); //Use different Requests for Yoda and Shakespear
+            GetTranslatedPokemonRequest translationRequest = new(result);
 
             var translationResult = await this._mediator.Send(translationRequest, cancellationToken);
 

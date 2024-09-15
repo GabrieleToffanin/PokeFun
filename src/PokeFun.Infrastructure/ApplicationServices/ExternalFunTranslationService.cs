@@ -20,17 +20,37 @@ public sealed class ExternalFunTranslationService(
 
         var httpMessageTranslationResult = await httpClient.PostAsync("yoda.json", httpPostContent, cancellationToken);
 
+        httpMessageTranslationResult.EnsureSuccessStatusCode();
+
         string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
 
-        string result = JsonSerializer.Deserialize<TranslationResponse>(content).Content.Translated;
+        TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
 
-        return result;
+        if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource.
+            return pokemonDescription;
+
+        return result.Content.Translated;
     }
 
     public async ValueTask<string> TranslatePokemonDescriptionUsingShakespeareAsync(string pokemonDescription, CancellationToken cancellationToken)
     {
         TranslationRequest request = new() { Text = pokemonDescription };
 
-        return pokemonDescription;
+        string serialized = JsonSerializer.Serialize(request);
+
+        HttpContent httpPostContent = new StringContent(serialized, Encoding.UTF8, "application/json");
+
+        var httpMessageTranslationResult = await httpClient.PostAsync("shakespeare.json", httpPostContent, cancellationToken);
+
+        httpMessageTranslationResult.EnsureSuccessStatusCode();
+
+        string content = await httpMessageTranslationResult.Content.ReadAsStringAsync();
+
+        TranslationResponse result = JsonSerializer.Deserialize<TranslationResponse>(content);
+
+        if (result.Success.Total <= 0) // If for some reason the service was not capable of translating the resource, or rate limit kicked in.
+            return pokemonDescription;
+
+        return result.Content.Translated;
     }
 }
