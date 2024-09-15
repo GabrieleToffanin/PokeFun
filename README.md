@@ -1,5 +1,7 @@
 # PokeFun
 
+[![Docker Image CI](https://github.com/GabrieleToffanin/PokeFun/actions/workflows/build-and-push-dockerimage.yml/badge.svg)](https://github.com/GabrieleToffanin/PokeFun/actions/workflows/build-and-push-dockerimage.yml)
+
 <p>Welcome to Poke fun, this is a fun project that uses :</p>
 
 <p>pokeapi.co and api.funtranslations.com/translate/ ( Thanks to them ).</p>
