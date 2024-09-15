@@ -11,10 +11,12 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["PokeFun.Api/PokeFun.Api.csproj", "PokeFun.Api/"]
+COPY ./PokeFun.Api/PokeFun.Api.csproj PokeFun.Api/
+COPY ./PokeFun.Application/PokeFun.Application.csproj PokeFun.Application/
+COPY ./PokeFun.Infrastructure/PokeFun.Infrastructure.csproj PokeFun.Infrastructure/
 RUN dotnet restore "./PokeFun.Api/PokeFun.Api.csproj"
 COPY . .
-WORKDIR "/src/PokeFun.Api"
+WORKDIR "PokeFun.Api"
 RUN dotnet build "./PokeFun.Api.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 FROM build AS publish
