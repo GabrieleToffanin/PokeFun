@@ -51,6 +51,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./src/PokeFun.Api
+          context: ./src
+          file: ./PokeFun.Api/Dockerfile
           push: true
           tags: gabrieletoffanin/pokefun:latest
