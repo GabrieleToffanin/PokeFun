@@ -36,4 +36,16 @@ public class PokemonController(IMediator mediator)
 
         return this.Ok(result.Value);
     }
+
+    [HttpGet]
+    [Route("[action]/{pokemonName}")]
+    [ProducesResponseType(typeof(PokemonDto), statusCode: (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), statusCode: (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(string), statusCode: (int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> Translated(
+        [FromRoute] string pokemonName,
+        CancellationToken cancellationToken)
+    {
+        return this.Ok();
+    }
 }

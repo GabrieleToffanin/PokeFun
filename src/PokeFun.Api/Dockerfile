@@ -17,11 +17,11 @@ COPY ./PokeFun.Infrastructure/PokeFun.Infrastructure.csproj PokeFun.Infrastructu
 RUN dotnet restore "./PokeFun.Api/PokeFun.Api.csproj"
 COPY . .
 WORKDIR "PokeFun.Api"
-RUN dotnet build "./PokeFun.Api.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+RUN dotnet build "./PokeFun.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./PokeFun.Api.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./PokeFun.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
