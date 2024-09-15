@@ -1,9 +1,9 @@
 using PokeFun.Application.PokemonUseCases.GetPokemonInformation;
 using PokeFun.Infrastructure.DependencyInjection;
 
-internal class Program
+public class Program
 {
-    private static void Main(string[] args)
+    public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
