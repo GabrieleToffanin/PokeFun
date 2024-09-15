@@ -7,6 +7,13 @@ public class Specie
     [JsonPropertyName("habitat")]
     public HabitatRedirect Habitat { get; set; }
     [JsonPropertyName("is_legendary")]
-    public bool is_legendary { get; set; }
+    public bool IsLegendary { get; set; }
+    [JsonPropertyName("flavor_text_entries")]
+    public Description[] Description { get; set; }
+}
 
+public record Description
+{
+    [JsonPropertyName("flavor_text")]
+    public string FlavorDescription { get; set; }
 }

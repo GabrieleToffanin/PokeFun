@@ -5,7 +5,7 @@ using PokeFun.Infrastructure.ApplicationServices;
 namespace PokeFun.Infrastructure.DependencyInjection;
 public static class RegisterExternalServicesDependencyInjectionExtensions
 {
-    private const string DefaultPokemonApiUrl = "https://pokeapi.co/api/v2/pokemon/";
+    private const string DefaultPokemonApiUrl = "https://pokeapi.co/api/v2/";
 
     public static IServiceCollection RegisterExternalServices(this IServiceCollection serviceCollection)
     {

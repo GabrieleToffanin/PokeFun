@@ -15,7 +15,7 @@ public sealed class GetPokemonRequestHandler(IExternalPokemonService externalPok
         try
         {
             if (string.IsNullOrEmpty(request.PokemonName))
-                return OperationResult<PokemonDto>.CreateResult(null!, Outcome.BadRequest); ; // Decide for exception or OperationResult wrapper.
+                return OperationResult<PokemonDto>.CreateResult(null!, Outcome.BadRequest);
 
             PokemonDto result = await this._externalPokemonService.GetPokemonInfoAsync(request.PokemonName, cancellationToken);
 
