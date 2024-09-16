@@ -32,6 +32,7 @@ localhost:5000/pokemon/translated/mewtwo
 
 ## Production Suggestions
 
-I would for sure cache the Pokémon species API response, as I don’t think it will change often.
-Also, as I noted before, HTTPS would be required if, for example, the chosen deployment environment were an Azure App Service.
-I would also choose a private container registry, such as the Azure or GitHub one.
+I would for sure cache the Pokémon species API response, as I don’t think it will change often.<br>
+Also, as I noted before, HTTPS would be required if, for example, the chosen deployment environment were an Azure App Service.<br>
+I would also choose a private container registry, such as the Azure or GitHub one.<br>
+I left Decide when no Specie Id can be found, actually an error or a default fallback would be necessary for what regards a production environment.
